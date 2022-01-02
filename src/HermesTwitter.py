@@ -5,13 +5,10 @@ import tweepy
 import tarotDeck
 from credentials import *
 
-
 # Creating api reference
 auth = tweepy.OAuthHandler(apiKey, apiSecret)
 auth.set_access_token(accessToken, accessSecret)
 twit = tweepy.API(auth)
-
-
 # Tarot Reading Objects
 hermes = tarotDeck.Reader()
 deck = tarotDeck.Deck()
@@ -24,7 +21,7 @@ def dailycard():
     cardRank = str(cardRank)
 
     # Navigating to card assets
-    cardPath = r"C:\Users\"
+    cardPath = r"C:\Users\----\HermesTwitter\BookOfShadows"
     os.chdir(cardPath)
 
     print("Drawn: ", cardRank, " of ", cardSuit)
@@ -51,10 +48,10 @@ def dailycard():
     # Searches for Card Picture
     if cardSuit in os.listdir():
         os.chdir(cardSuit)
-        print(os.getcwd())
+        ##print(os.getcwd())
 
         # Tweets picture
-        twit.update_with_media(cardRank, cardLog)
+        twit.update_status_with_media(cardLog, cardRank)
         print("Completed Reading Number:", len(tarotDeck.drawnCards))
         os.chdir(cardPath)
         book.close()
@@ -68,17 +65,19 @@ def verifycred():
     twit.verify_credentials()
     print("Authentication Successful")
 
+
 def clearhistory():
     hermes.clearHistory()
 
 
 print("Welcome. Schedule Set.")
 
+
 schedule.every().day.at("09:00").do(dailycard)
 schedule.every().day.at("15:00").do(dailycard)
 schedule.every().day.at("21:00").do(dailycard)
 
-schedule.every().day.at("00:01").do(clearhistory)
+schedule.every().day.at("06:00").do(clearhistory)
 
 while True:
     schedule.run_pending()
