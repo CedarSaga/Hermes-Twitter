@@ -98,6 +98,10 @@ class Reader:
             card.show()
             print()
 
+    def oneCardDraw(self, deck):
+        card = deck.drawCard()
+        self.hand.add(card)
+
     def threeCardDeal(self):
         print("Shuffling... \n")
         time.sleep(.5)

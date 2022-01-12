@@ -27,6 +27,7 @@ def dailycard():
     cardRank = str(cardRank)
 
     # Navigating to card assets
+    # TODO: Re-do path to navigate, not hardcode
     cardPath = r"C:\Users\Hermes\Documents\Code Projects\Python\HermesTwitter\BookOfShadows"
     os.chdir(cardPath)
 
@@ -82,7 +83,7 @@ def checkmentions(api, keywords, since_id):
     for tweet in tweepy.Cursor(twit.mentions_timeline, since_id=since_id).items():
         new_since_id = max(tweet.id, new_since_id)
         if tweet.in_reply_to_status_id is not None:
-                continue
+            continue
         if any(keyword in tweet.text.lower() for keyword in keywords):
             logger.info(f"Answering to {tweet.user.name}")
 
@@ -94,6 +95,7 @@ def checkmentions(api, keywords, since_id):
             cardRank = str(cardRank)
 
             # Navigating to card assets
+            # TODO: Remove redundancy
             cardPath = r"C:\Users\Hermes\Documents\Code Projects\Python\HermesTwitter\BookOfShadows"
             os.chdir(cardPath)
 
@@ -122,8 +124,7 @@ def checkmentions(api, keywords, since_id):
             if cardSuit in os.listdir():
                 os.chdir(cardSuit)
             replyStatus = ('@' + tweet.user.screen_name + " " + cardLog)
-            tweetIdString = tweet.id
-            twit.update_status_with_media(status=(replyStatus), filename=cardRank, in_reply_to_status_id=tweet.id_str)
+            twit.update_status_with_media(status=replyStatus, filename=cardRank, in_reply_to_status_id=tweet.id_str)
             hermes.clear()
     return new_since_id
 
@@ -132,14 +133,14 @@ print("Welcome. Schedule Set.")
 since_id = 1
 
 
-schedule.every().day.at("09:00").do(dailycard)
-schedule.every().day.at("15:00").do(dailycard)
-schedule.every().day.at("21:00").do(dailycard)
+schedule.every.day.at("09:00").do(dailycard)
+schedule.every.day.at("15:00").do(dailycard)
+schedule.every.day.at("21:00").do(dailycard)
 
-schedule.every().day.at("06:00").do(clearhistory)
+schedule.every.day.at("06:00").do(clearhistory)
 
 while True:
-    schedule.run_pending()
+    schedule.run_pending
     since_id = checkmentions(twit, ["reading"], since_id)
     logger.info("Waiting...")
     time.sleep(60)
